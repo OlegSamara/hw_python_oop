@@ -134,7 +134,7 @@ TRAINING_TYPES = {
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if workout_type in TRAINING_TYPES:
+    if workout_type not in TRAINING_TYPES:
         raise KeyError("Invalid training type")
     return TRAINING_TYPES[workout_type](*data)
 
