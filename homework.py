@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -9,7 +10,7 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    
+
     def get_message(self):
         return (f'Тип тренировки: {self.training_type};'
                 f' Длительность: {self.duration:.3f} ч.;'
@@ -62,12 +63,11 @@ class Running(Training):
     CALORIES_MEAN_SPEED_MULTIPLIER = 18
     CALORIES_MEAN_SPEED_SHIFT = 1.79
 
-
     def get_spent_calories(self):
-        return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed() 
-                 + self.CALORIES_MEAN_SPEED_SHIFT) * self.weight 
-                 / self.M_IN_KM * self.duration 
-                 * self.MIN_IN_H)
+        return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
+                 + self.CALORIES_MEAN_SPEED_SHIFT) * self.weight
+                / self.M_IN_KM * self.duration
+                * self.MIN_IN_H)
 
 
 class SportsWalking(Training):
@@ -77,7 +77,7 @@ class SportsWalking(Training):
     CALORIES_WEIGHT_MULTIPLIER = 0.035
     CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
     M_IN_KM = 1000
-    KMH_IN_MSEC = round(M_IN_KM / 60 / 60, 3) #0.278
+    KMH_IN_MSEC = round(M_IN_KM / 60 / 60, 3)   # 0.278
     CM_IN_M = 100
 
     def __init__(self,
@@ -134,7 +134,7 @@ TRAINING_TYPES = {
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if not workout_type in TRAINING_TYPES:
+    if workout_type in TRAINING_TYPES:
         raise KeyError("Invalid training type")
     return TRAINING_TYPES[workout_type](*data)
 
@@ -153,4 +153,3 @@ if __name__ == '__main__':
 
     for workout_type, data in packages:
         main(read_package(workout_type, data))
-
