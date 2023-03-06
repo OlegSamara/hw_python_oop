@@ -76,8 +76,11 @@ class SportsWalking(Training):
     LEN_STEP = 0.65
     CALORIES_WEIGHT_MULTIPLIER = 0.035
     CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
-    M_IN_KM = 1000
-    KMH_IN_MSEC = round(M_IN_KM / 60 / 60, 3)   # 0.278
+    EXPONENT_FOR_SPEED = 2
+    SEC_IN_MIN = 60
+    KMH_IN_MSEC = round(Training.M_IN_KM
+                        / Training.MIN_IN_H
+                        / SEC_IN_MIN, 3)   # 0.278
     CM_IN_M = 100
 
     def __init__(self,
@@ -90,10 +93,15 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self):
-        return ((self.CALORIES_WEIGHT_MULTIPLIER * self.weight
-                + ((self.get_mean_speed() * self.KMH_IN_MSEC) ** 2
-                   / (self.height / self.CM_IN_M))
-                * self.CALORIES_SPEED_HEIGHT_MULTIPLIER * self.weight)
+        return ((self.CALORIES_WEIGHT_MULTIPLIER
+                 * self.weight
+                 + ((self.get_mean_speed()
+                     * self.KMH_IN_MSEC)
+                     ** self.EXPONENT_FOR_SPEED
+                     / (self.height
+                        / self.CM_IN_M))
+                 * self.CALORIES_SPEED_HEIGHT_MULTIPLIER
+                 * self.weight)
                 * self.duration * self.MIN_IN_H)
 
 
@@ -134,8 +142,15 @@ TRAINING_TYPES = {
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
+    if not type(workout_type) is str:
+        raise TypeError('Не ожиданный тип workout_type:'
+                        f' {type(workout_type)} '
+                        'ожидалось str')
     if workout_type not in TRAINING_TYPES:
-        raise KeyError("Invalid training type")
+        raise KeyError('Не ожиданное значение workout_type:'
+                       f' {workout_type} '
+                       'ожидалось значение из списка:'
+                       f' {list(TRAINING_TYPES.keys())}')
     return TRAINING_TYPES[workout_type](*data)
 
 
