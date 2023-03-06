@@ -142,15 +142,11 @@ TRAINING_TYPES = {
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if not type(workout_type) is str:
-        raise TypeError('Не ожиданный тип workout_type:'
-                        f' {type(workout_type)} '
-                        'ожидалось str')
     if workout_type not in TRAINING_TYPES:
-        raise KeyError('Не ожиданное значение workout_type:'
-                       f' {workout_type} '
-                       'ожидалось значение из списка:'
-                       f' {list(TRAINING_TYPES.keys())}')
+        raise ValueError('Не ожиданное значение workout_type:'
+                         f' {workout_type} '
+                         'ожидалось значение из списка:'
+                         f' {list(TRAINING_TYPES.keys())}')
     return TRAINING_TYPES[workout_type](*data)
 
 
